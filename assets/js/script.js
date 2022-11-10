@@ -1,20 +1,10 @@
 const startBtn = document.querySelector('#start-btn');
-
 const timerDiv = document.querySelector('#timer');
-
 const timeSpan = document.querySelector('#time');
-
 const questionsDiv = document.querySelector('#questions');
-
 const highScores = document.querySelector('.highscores');
-
-const titleText = document.querySelector('#titleText')
-
-
-
-
-
-
+const titleText = document.querySelector('#titleText');
+const header = document.querySelector('header');
 
 const questions = [
         {
@@ -44,23 +34,39 @@ const questions = [
     },
 ];
 
-
-
-
-
-
 let questionIndex = 0;
-
 let time = 60;
-
 let quizTimer;
 
+const refreshPage = () => {
+    window.location.reload()
+}
 
+const showScores = () => {
+    
+    header.remove();
+    document.querySelector('main').remove();
 
+    const hsDiv = document.createElement("div");
+    const hsHeader = document.createElement("header");
+    const hsTitle = document.createElement("h1");
+    const hsGoBack = document.createElement("button");
 
+    hsGoBack.textContent = "go back";
+    hsGoBack.setAttribute("id", "goBack");
+    hsDiv.setAttribute("id", "hsDiv");
 
+    hsHeader.innerHTML = "Current High Score";
+    hsHeader.setAttribute('id', 'hsHeader');    
+    hsTitle.textContent = localStorage.getItem('newHs') + ": " + localStorage.getItem('newScore');
 
-
+    document.querySelector('body').appendChild(hsHeader);
+    document.querySelector('body').appendChild(hsDiv);
+    hsDiv.appendChild(hsTitle);
+    hsDiv.appendChild(hsGoBack);
+    hsGoBack.addEventListener("click", refreshPage)
+    
+};
 
 const startQuiz = () => {
 
@@ -75,13 +81,6 @@ const startQuiz = () => {
     displayQuestions();
 
 };
-
-
-
-
-
-
-
 
 const displayQuestions = () => {
     questionsDiv.innerHTML = ''
@@ -106,10 +105,6 @@ const displayQuestions = () => {
         })
     });
 };
-
-
-
-
 
 const handleCorrectAnswer = () => {
     questionIndex++;
@@ -154,6 +149,12 @@ const endQuiz = () => {
     endContainer.appendChild(inputBox);
     endContainer.appendChild(submitButton);
 
+    
+    const goBack = document.createElement("button");
+    goBack.textContent = "go back";
+    endContainer.appendChild(goBack);
+    goBack.addEventListener("click", refreshPage)
+
     submitButton.addEventListener("click", function(event) {
         event.preventDefault();
         let newEntry = inputBox.value;
@@ -168,17 +169,7 @@ const endQuiz = () => {
         inputBox.value = ""
         });
     return;
-
 };
 
-
-
-
-
-
-
+highScores.addEventListener("click", showScores);
 startBtn.addEventListener('click', startQuiz);
-
-
-
-// -------------------------------------------------------------------------------
